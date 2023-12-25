@@ -21,9 +21,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ secrets.DOCKER_USERNAME }}/gitops
           tags: ${{ github.sha }}, latest
-          tag_with_ref: false
-          tag_with_sha: false
-          path: .
-          always_pull: false
-          add_git_labels: false
-          push: true
