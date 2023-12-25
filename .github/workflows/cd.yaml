@@ -1,9 +1,8 @@
 name: CDGitops
 
-on:
+on: 
   push:
-    branches:
-    - "main"
+    branches: [main]
 
 jobs:
   build:
@@ -11,42 +10,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Run Docker Build and Push
-        uses: docker/build-push-action@v1.1.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_USERNAME }}/gitops
-          tags: ${{ github.sha }}, latest
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup Kustomize
-        uses: imranismail/setup-kustomize@v2
-        with:
-          kustomize-version: 'v4.4.0'
+    - name: Build and push image to Dockerhub
+      uses: docker/build-push-action@v1.1.0
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ${{ secrets.DOCKER_USERNAME }}/gitops
+        tags: ${{ github.sha }}, latest
 
-      - name: Update Kubernetes resources
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        run: |
-          cd k8s
-          kustomize edit set image goserver=$DOCKER_USERNAME/gitops:$GITHUB_SHA
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+      with: 
+        kustomize-version: "3.6.1"
 
-      - name: Clear Git Credential Cache
-        run: git credential-cache exit
-        
-      - name: Commit
-        run: |
-          git config --local user.name "leonardomdeoli"
-          git config --local user.email "leonardomdeoli@gmail.com"
-          git commit -am "Bump docker version [skip ci]"
-          
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
-          branch: ${{ github.ref }}
+    - name: Update Kubernetes resources
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: |
+        cd k8s
+        kustomize edit set image goserver=$DOCKER_USERNAME/gitops:$GITHUB_SHA
 
-      
+    - name: Commit
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Bump docker version"
+
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        repository: Leonardomdeoli/gitops

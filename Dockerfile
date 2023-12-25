@@ -1,14 +1,9 @@
-# Use a imagem base oficial do Go
-FROM golang:1.18
-
-# Defina o diretório de trabalho dentro do contêiner
+FROM golang:1.19 as build
 WORKDIR /app
-
-# Copie o código fonte para o diretório de trabalho
 COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server
 
-# Compile o código Go
-RUN go build -o server .
-
-# Defina o comando de execução quando o contêiner for iniciado
-ENTRYPOINT [ "./server"]
+FROM scratch
+WORKDIR /app
+COPY --from=build /app/server .
+ENTRYPOINT ["./server"]
