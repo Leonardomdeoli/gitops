@@ -7,5 +7,5 @@ resources:
 
 images:
 - name: goserver
-  newName: L1EO/gitops
-  newTag: NOV3A
+  newName: leonardomdeoli/gitops
+  newTag: 5ade979194ac5af801985d082727a91a77ae3842
