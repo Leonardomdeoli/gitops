@@ -27,6 +27,27 @@ git clone https://github.com/Leonardomdeoli/gitops.git
 cd gitops
 ````
 
+Criando o cluster
+````sh
+kind create cluster
+````
+````sh
+Creating cluster "kind" ...
+ ✓ Ensuring node image (kindest/node:v1.27.3) 🖼 
+ ✓ Preparing nodes 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 🕹️ 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+Set kubectl context to "kind-kind"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-kind
+
+Thanks for using kind! 😊
+````
+
+
 ## Configuração do ArgoCD
 
 1. **Instalar ArgoCD CLI:**
