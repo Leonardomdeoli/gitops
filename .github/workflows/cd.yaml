@@ -38,7 +38,7 @@ jobs:
         run: |
           git config --local user.name "action.github.com"
           git config --local user.name "GitHub Action"
-          git commit -am "Bump docker version"
+          git commit -am "Bump docker version [skip ci]"
           
       - name: Push
         uses: ad-m/github-push-action@master
