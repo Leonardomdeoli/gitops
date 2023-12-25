@@ -33,20 +33,10 @@ jobs:
         cd k8s
         kustomize edit set image goserver=$DOCKER_USERNAME/gitops:$GITHUB_SHA
 
-    - name: Commit Changes
+    - name: Commit and push Changes
       run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           git diff-index --quiet HEAD || git commit -m "Bump docker version"
-  
-    - name: Push Changes
-      run: |
-          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
-          gh repo view --json private --jq '.private' | grep true && PRIVATE="--private" || PRIVATE=""
-          gh repo clone $PRIVATE $GITHUB_REPOSITORY temp-repo
-          cd temp-repo
-          git checkout main
-          git pull origin main
-          git merge --no-edit --ff-only $GITHUB_SHA
           git push origin main
