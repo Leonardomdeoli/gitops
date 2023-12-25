@@ -8,4 +8,4 @@ resources:
 images:
 - name: goserver
   newName: leonardomdeoli/gitops
-  newTag: 5ade979194ac5af801985d082727a91a77ae3842
+  newTag: ffc5eb0a9cd680364917860f9cfb0a8bbb443ec1
